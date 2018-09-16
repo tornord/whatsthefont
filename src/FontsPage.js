@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import seedrandom from "seedrandom";
 import lorumipsum from "./lorumipsum.json";
-import { FontImageProvider } from "./FontImageProvider";
+import { FontImageCreator } from "./FontImageCreator";
 import qs from "qs";
 
 // References
@@ -21,13 +21,13 @@ export class FontsPage extends React.Component {
 	}
 
 	static randomFontText(seed, text) {
-		var nf = seed % FontImageProvider.fontNames.length;
-		var font = FontImageProvider.fontNames[nf];
-		var rng = seedrandom((seed-nf)/FontImageProvider.fontNames.length);
+		var nf = seed % FontImageCreator.fontNames.length;
+		var font = FontImageCreator.fontNames[nf];
+		var rng = seedrandom((seed-nf)/FontImageCreator.fontNames.length);
 		if (!text) {
-			let rndtext = FontImageProvider.randomItem(lorumipsum.strings, rng);
+			let rndtext = FontImageCreator.randomItem(lorumipsum.strings, rng);
 			let m = 12;
-			let n = FontImageProvider.randomInt(rng, rndtext.length-m);
+			let n = FontImageCreator.randomInt(rng, rndtext.length-m);
 			text = rndtext.slice(n, n+m).trim().replace(/^[A-Za-z]?[.,]? /, "").replace(/[.,;-]/g, "");
 		}
 		return <div className="row">
@@ -45,7 +45,7 @@ export class FontsPage extends React.Component {
 		var seed = new Date().getTime();
 		var rng = seedrandom(seed);
 		return <Fragment>
-			{ [...Array(FontImageProvider.fontNames.length)].map((d,i) => <div key={i}>{ FontsPage.randomFontText(FontImageProvider.fontNames.length*Math.floor(1e7*rng())+i, queryArgs.text) }</div>) }
+			{ [...Array(FontImageCreator.fontNames.length)].map((d,i) => <div key={i}>{ FontsPage.randomFontText(FontImageCreator.fontNames.length*Math.floor(1e7*rng())+i, queryArgs.text) }</div>) }
 		</Fragment>;
 	}
 }

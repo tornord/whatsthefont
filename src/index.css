@@ -30,7 +30,7 @@
 }
 @font-face {
   font-family: "Baskerville";
-  src: url("./fonts/Baskerville-Regular.woff") format("woff");
+  src: url("./fonts/Baskerville-Medium.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
 }
@@ -235,6 +235,12 @@
 @font-face {
   font-family: "Petersburg";
   src: url("./fonts/Petersburg.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Pluto Sans";
+  src: url("./fonts/PlutoSans-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal; 
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import { FontImageProvider } from "./FontImageProvider";
 import FontFaceObserver from "fontfaceobserver";
+import { FontImageCreator } from "./FontImageCreator";
 
 var format = (v, size, decimals) => {
     return v.toFixed(decimals, 10).padStart(size);
@@ -54,7 +54,7 @@ export class FontImageCanvas extends Component {
     };
     
     componentDidMount() {
-        var { font } = FontImageProvider.createRandomFeatures(this.props.seed);
+        var { font } = FontImageCreator.calcFeatures(this.props.seed);
         var fontobs = new FontFaceObserver(font);
         fontobs.load().then(() => { this.draw(); });
     }
@@ -71,12 +71,12 @@ export class FontImageCanvas extends Component {
 
         ctx.save();
         ch.fill("#fff");
-        FontImageProvider.createRandomImage(canvas, this.props.width, this.props.seed);
+        FontImageCreator.createRandomImage(canvas, this.props.width, this.props.seed);
         ctx.restore();
     }
 
     render() {
-        var { font, text } = FontImageProvider.createRandomFeatures(this.props.seed);
+        var { font, text } = FontImageCreator.calcFeatures(this.props.seed);
         return <canvas className="fontimage" name={this.props.seed} title={font + " - " + text} ref={ (e) => { this.canvasRef = e; } } ></canvas>;
     }
 }
