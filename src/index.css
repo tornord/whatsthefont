@@ -1,0 +1,329 @@
+@font-face {
+  font-family: "Akzidenz Grotesk";
+  src: url("./fonts/AkzidenzGrotesk-Roman.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "American Typewriter";
+  src: url("./fonts/AmericanTypewriter.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Arial";
+  src: url("./fonts/Arial.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Arnhem";
+  src: url("./fonts/ArnhemPro-Blond.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Avenir";
+  src: url("./fonts/Avenir-Medium.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Baskerville";
+  src: url("./fonts/Baskerville-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Bauhaus";
+  src: url("./fonts/Bauhaus-Medium.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Bembo";
+  src: url("./fonts/Bembo.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Bodoni";
+  src: url("./fonts/Bodoni.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Didot";
+  src: url("./fonts/Didot.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Consolas";
+  src: url("./fonts/Consolas.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Cambria";
+  src: url("./fonts/Cambria.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Caslon Antique";
+  src: url("./fonts/CaslonAntique.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "CNN Sans";
+  src: url("./fonts/CnnSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Courier";
+  src: url("./fonts/Courier.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Franklin Gothic";
+  src: url("./fonts/FranklinGothic-Book.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Frutiger";
+  src: url("./fonts/Frutiger-Roman.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Futura";
+  src: url("./fonts/Futura-Medium.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "GothamRounded-Book";
+  src: url("./fonts/GothamRounded-Book.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Gotham Rounded";
+  src: url("./fonts/GothamRounded-Medium.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Gill Sans";
+  src: url("./fonts/GillSans.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Gibson";
+  src: url("./fonts/Gibson.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Gotham";
+  src: url("./fonts/GothamPro.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Garamond";
+  src: url("./fonts/Garamond.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Georgia";
+  src: url("./fonts/Georgia.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Graphik";
+  src: url("./fonts/Graphik-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("./fonts/HelveticaNeue.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Lucida Sans";
+  src: url("./fonts/LucidaSans.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Lane Crawford";
+  src: url("./fonts/LaneCrawford-Medium.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Mrs Eaves";
+  src: url("./fonts/MrsEaves-Roman.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Minion";
+  src: url("./fonts/MinionPro.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat-Medium.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Museo Sans";
+  src: url("./fonts/MuseoSans.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Myriad";
+  src: url("./fonts/Myriad-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "News Gothic";
+  src: url("./fonts/NewsGothic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Optima";
+  src: url("./fonts/Optima.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url("./fonts/OpenSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("./fonts/ProximaNova.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Palatino";
+  src: url("./fonts/Palatino-Medium.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Petersburg";
+  src: url("./fonts/Petersburg.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Public";
+  src: url("./fonts/Public.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("./fonts/Roboto-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Rockwell";
+  src: url("./fonts/Rockwell.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+@font-face {
+  font-family: "Sabon";
+  src: url("./fonts/SabonLTStd-Roman.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Segoe UI";
+  src: url("./fonts/SegoeUI.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Stag";
+  src: url("./fonts/Stag-Medium.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Tahoma";
+  src: url("./fonts/Tahoma.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Times New Roman";
+  src: url("./fonts/TimesNewRoman.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Univers";
+  src: url("./fonts/Univers.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Verdana";
+  src: url("./fonts/Verdana.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+*, body {
+  margin: 0;
+  padding: 0;
+  color: #333;
+  background-color: #f4fdf1;
+  line-height: 1.42857;
+}
+
+*, button, input, optgroup, select, textarea {
+  font-family: "GothamRounded-Book";
+  font-size: 12pt;
+}
+
+.fontexample {
+  font-size: 60pt;
+}
+
+.fontname {
+  color: #888;
+  text-align: left;
+  font-size: 12pt;
+  margin-bottom: 0;
+}
+
+.fontimage {
+  margin-right: 8px;
+  margin-bottom: 2px;
+}
