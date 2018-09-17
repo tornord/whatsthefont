@@ -1,13 +1,14 @@
-var path = require("path");
 var Canvas = require("canvas");
-var seedrandom = require("seedrandom");
 var Image = Canvas.Image;
-var ImageData = Canvas.ImageData;
-var { FontImageCreator } = require("../commonjs/src/FontImageCreator");
+var Font = Canvas.Font;
+var path = require("path");
+var { FontImageCreator } = require("./commonjs/src/FontImageCreator");
 
 function fontFile(name) {
-    return path.join(__dirname, "./fonts/ttf", name);
+    return path.join(__dirname, "./src/fonts/ttf", name);
 }
+
+// var f = new Canvas.Font("Akzidenz Grotesk", fontFile("AkzidenzGrotesk-Roman.ttf"));
 
 Canvas.registerFont(fontFile("AkzidenzGrotesk-Roman.ttf"), { family: "Akzidenz Grotesk" });
 Canvas.registerFont(fontFile("AmericanTypewriter.ttf"), { family: "American Typewriter" });
@@ -63,44 +64,79 @@ Canvas.registerFont(fontFile("TimesNewRoman.ttf"), { family: "Times New Roman" }
 Canvas.registerFont(fontFile("Univers.ttf"), { family: "Univers" });
 Canvas.registerFont(fontFile("Verdana.ttf"), { family: "Verdana" });
 
-class FontImageProvider {
-    static createDataURL(imageSize, backgroundColor, seed) {
-        let canvas = Canvas.createCanvas(imageSize, imageSize);
-        let ctx = canvas.getContext("2d");
-        FontImageCreator.createRandomImage(ctx, imageSize, seed, backgroundColor);
-        return canvas.toDataURL();
+var fontNames = [
+    "Helvetica Neue",
+    "Baskerville",
+    "Times New Roman",
+    "Akzidenz Grotesk",
+    "Gotham",
+    "Bodoni",
+    "Didot",
+    "Futura",
+    "Gill Sans",
+    "Frutiger",
+    "Bembo",
+    "Rockwell",
+    "Franklin Gothic",
+    "Sabon",
+    "Georgia",
+    "Garamond",
+    "News Gothic",
+    "Myriad",
+    "Mrs Eaves",
+    "Minion",
+    "Roboto",
+    "Verdana",
+    "Montserrat",
+    "Proxima Nova",
+    "Gotham Rounded",
+    "Segoe UI",
+    "Arial",
+    "Avenir",
+    "Stag",
+    "Public",
+    "Museo Sans",
+    "Gibson",
+    "Tahoma",
+    "Consolas",
+    "Optima",
+    "Lucida Sans",
+    "Arnhem",
+    "Palatino",
+    "American Typewriter",
+    "Courier",
+    "Petersburg",
+    "Bauhaus",
+    "Open Sans",
+    "Cambria",
+    "Univers",
+    "Graphik",
+    "Caslon Antique",
+    "Lato",
+    "Pluto Sans",
+    "Brandon Grotesque",
+    "Raleway",
+    "Circular"
+];
+
+console.log("loaded");
+
+function draw() {
+    var imageSize = 100;
+
+    var canvases = fontNames.map((d) => Canvas.createCanvas(imageSize, imageSize));
+    //var canvas = Canvas.createCanvas(imageSize, imageSize);
+
+    //FontImageCreator.createRandomImage(ctx, imageSize, 21445025);
+    for (let i = 0; i < 10000; i++) {
+        var n = Math.floor(fontNames.length * Math.random());
+        var canvas = canvases[n];
+        var ctx = canvas.getContext("2d");
+        ctx.font = "72.8px " + "'" + fontNames[n] + "'";
+        ctx.fillText("test", 25, 45);
     }
 
-    static readImageData(bytebuffer, index, canvas, imageSize) {
-        let imagePixelCount = imageSize * imageSize;
-        let ctx = canvas.getContext("2d");
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const floatArray = new Float32Array(bytebuffer, index * imagePixelCount * 4, imagePixelCount);
-        for (let i = 0; i < imageData.data.length / 4; i++) {
-            floatArray[i] = imageData.data[i * 4] / 255;
-        }
-        return floatArray;
-    }
-
-    static nextBatch(count, imageSize, seed) {
-        var canvases = FontImageCreator.fontNames.map((d) => Canvas.createCanvas(imageSize, imageSize));
-
-        let buffer = new ArrayBuffer(count * imageSize * imageSize * 4);
-        let rng = seedrandom(seed);
-        //let canvas = Canvas.createCanvas(imageSize, imageSize);
-        let labelarray = [];
-        for (let i = 0; i < count; i++) {
-            let s = Math.floor(1e8 * rng());
-            let feats = FontImageCreator.calcFeatures(s);
-            let canvas = canvases[seed % FontImageCreator.fontNames.length];
-            let ctx = canvas.getContext("2d");
-            //console.log(i + " - " + s + " - " + JSON.stringify(feats));
-            FontImageCreator.createRandomImage(ctx, imageSize, s);
-            FontImageProvider.readImageData(buffer, i, canvas, imageSize);
-            labelarray.push(FontImageCreator.fontNames.map((d) => (d === feats.font ? 1 : 0)));
-        }
-        return { xs: new Float32Array(buffer, 0, count * imageSize * imageSize), labels: labelarray };
-    }
+    console.log('<img src="' + canvas.toDataURL() + '" />');
 }
 
-module.exports = { FontImageProvider };
+draw();

@@ -2,6 +2,7 @@ var seedrandom = require("seedrandom");
 var tf = require("@tensorflow/tfjs");
 require("@tensorflow/tfjs-node");
 var fs = require("fs");
+var path = require("path");
 var { Model } = require("../commonjs/src/Model");
 var { FontImageCreator } = require("../commonjs/src/FontImageCreator");
 var { FontImageProvider } = require("./FontImageProvider");
@@ -19,7 +20,7 @@ class UI {
 }
 
 function nextBatch(batchSize, imageSize, seed) {
-    let batch = FontImageProvider.nextBatch(batchSize, imageSize, seed)
+    let batch = FontImageProvider.nextBatch(batchSize, imageSize, seed);
     let xs = tf.tensor2d(batch.xs, [batchSize, imageSize * imageSize]);
     let labels = tf.tensor2d(batch.labels, [batchSize, batch.labels[0].length]);
     xs = xs.reshape([batchSize, imageSize, imageSize, 1]);
@@ -29,8 +30,8 @@ function nextBatch(batchSize, imageSize, seed) {
 async function modelToJson(model, name) {
     var ws = model.getNamedWeights();
     const { data: weightData, specs: weightSpecs } = await tf.io.encodeWeights(ws);
-    const modelTopology = model.toJSON(null, false);    
-    return { name, modelTopology, weightSpecs, weightData: new Buffer(weightData).toString('base64') };
+    const modelTopology = model.toJSON(null, false);
+    return { name, modelTopology, weightSpecs, weightData: new Buffer(weightData).toString("base64") };
 }
 
 async function train(model) {
@@ -62,12 +63,17 @@ async function train(model) {
             accuracyValues.push({ batch: i, accuracy: accuracy, set: "train" });
             ui.plotAccuracies(accuracyValues);
         }
-        if (i % 50 === 0) {
-            console.log(accuracyValues.map((d) => (100 * d.accuracy).toFixed(0)).join(" "));
+        if (i > 0 && i % 20 === 0) {
+            console.log(
+                accuracyValues
+                    .slice(accuracyValues.length - 4, accuracyValues.length)
+                    .map((d) => (100 * d.accuracy).toFixed(0))
+                    .join(" ")
+            );
         }
         tf.dispose([batch, validationData]);
         await tf.nextFrame();
-	}
+    }
     return { lossValues, accuracyValues };
 }
 
@@ -100,7 +106,7 @@ async function run() {
     let yPred = await pred.data();
 
     let rng = seedrandom(seed);
-    // let page = new ResultPage();
+    let page = new ResultPage();
     let nCorrect = 0;
     for (let i = 0; i < testCount; i++) {
         let imgseed = Math.floor(1e8 * rng());
@@ -115,17 +121,17 @@ async function run() {
             },
             { name: "", value: 0 }
         );
-        nCorrect += feats.geoform === predLab.name ? 1 : 0;
-        // if (i < 1000) {
-        //     var src = FontImageProvider.createDataURL(IMAGES_SIZE, feats.geoform === predLab.name ? "#96f16a" : "#ec6a6a", imgseed);
-        //     page.addImage(feats.geoform + " => " + predLab.name + " " + (100 * predLab.value).toFixed(0) + "%", src);
-        // }
+        nCorrect += feats.font === predLab.name ? 1 : 0;
+        if (i < 1000) {
+            var src = FontImageProvider.createDataURL(IMAGES_SIZE, feats.font === predLab.name ? "#96f16a" : "#ec6a6a", imgseed);
+            page.addImage(feats.font + " => " + predLab.name + " " + (100 * predLab.value).toFixed(0) + "%", src);
+        }
     }
     console.log(((100 * nCorrect) / testCount).toFixed(2) + "%");
-	// page.writeFile("./index.html");
-	var json = await modelToJson(model, "whatsthefont");
-	var modelPath = path.join(__dirname, "data");
-	fs.writeFileSync(path.join(modelPath, "model.json"), JSON.stringify(json));
+    page.writeFile(path.join(__dirname, "../public/result.html"));
+    var json = await modelToJson(model, "whatsthefont");
+    var modelPath = path.join(__dirname, "data");
+    fs.writeFileSync(path.join(modelPath, "model.json"), JSON.stringify(json));
 }
 
 run();

@@ -10,7 +10,7 @@
     "babel": "babel src/FontImageCreator.js src/Model.js --out-dir ./commonjs --watch"
   },
   "dependencies": {
-    "canvas": "^1.6.12",
+    "canvas": "^2.0.0-alpha.14",
     "fontfaceobserver": "^2.0.13",
     "qs": "^6.5.2",
     "react": "^16.4.2",
