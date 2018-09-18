@@ -25,7 +25,7 @@ class Model {
 
         var lay3 = tf.layers.conv2d({
             kernelSize: 5,
-            filters: 120,
+            filters: 200,
             strides: 1,
             activation: "relu",
             kernelInitializer: "VarianceScaling"

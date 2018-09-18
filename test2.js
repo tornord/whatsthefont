@@ -1,7 +1,8 @@
+var path = require("path");
 var Canvas = require("canvas");
 var Image = Canvas.Image;
 var Font = Canvas.Font;
-var path = require("path");
+var seedrandom = require("seedrandom");
 var { FontImageCreator } = require("./commonjs/src/FontImageCreator");
 
 function fontFile(name) {
@@ -121,21 +122,45 @@ var fontNames = [
 
 console.log("loaded");
 
+function getCanvas(canvases, fontStr, imageSize) {
+    var canvas = canvases[fontStr];
+    if (!canvas) {
+        canvas = Canvas.createCanvas(imageSize, imageSize);
+        let ctx = canvas.getContext("2d");
+        ctx.font = fontStr;
+        canvases[fontStr] = canvas;
+    }
+    return canvas;
+}
+
 function draw() {
-    var imageSize = 100;
+    var fontStrs = {};
+    var imageSize = 28;
 
-    var canvases = fontNames.map((d) => Canvas.createCanvas(imageSize, imageSize));
-    //var canvas = Canvas.createCanvas(imageSize, imageSize);
+    var canvases = FontImageCreator.fontNames.map((d) => Canvas.createCanvas(imageSize, imageSize));
+    var canvas;
 
-    //FontImageCreator.createRandomImage(ctx, imageSize, 21445025);
+    let rng = seedrandom(123);
     for (let i = 0; i < 10000; i++) {
-        var n = Math.floor(fontNames.length * Math.random());
-        var canvas = canvases[n];
-        var ctx = canvas.getContext("2d");
-        ctx.font = "72.8px " + "'" + fontNames[n] + "'";
+        let imgseed = Math.floor(1e8 * rng());
+
+        let n = imgseed % FontImageCreator.fontNames.length;
+        // canvas = canvases[n];
+        // let ctx = canvas.getContext("2d");
+
+        // FontImageCreator.createRandomImage(ctx, imageSize, imgseed);
+        let d = 0.75 + 0.3*rng();
+        let fontStr = (d*imageSize).toFixed(0) + "px " + "'" + fontNames[n] + "'";
+        var canvas = getCanvas(canvases, fontStr, imageSize);
+        let ctx = canvas.getContext("2d");
+
+        // fontStrs[fontStr] = true;
+        // fontStr = "28px 'Franklin Gothic'";
+        // console.log(fontStr);
+        // ctx.font = fontStr;
+        console.log(Object.keys(canvases).length);
         ctx.fillText("test", 25, 45);
     }
-
     console.log('<img src="' + canvas.toDataURL() + '" />');
 }
 

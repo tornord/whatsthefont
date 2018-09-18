@@ -64,10 +64,10 @@ Canvas.registerFont(fontFile("Univers.ttf"), { family: "Univers" });
 Canvas.registerFont(fontFile("Verdana.ttf"), { family: "Verdana" });
 
 class FontImageProvider {
-    static createDataURL(imageSize, backgroundColor, seed) {
-        let canvas = Canvas.createCanvas(imageSize, imageSize);
-        let ctx = canvas.getContext("2d");
-        FontImageCreator.createRandomImage(ctx, imageSize, seed, backgroundColor);
+    static createDataURL(canvases, imageSize, backgroundColor, seed) {
+        // let canvas = Canvas.createCanvas(imageSize, imageSize);
+        // let ctx = canvas.getContext("2d");
+        let canvas = FontImageCreator.createRandomImage(canvases, null, imageSize, seed, backgroundColor);
         return canvas.toDataURL();
     }
 
@@ -82,24 +82,23 @@ class FontImageProvider {
         return floatArray;
     }
 
-    static nextBatch(count, imageSize, seed) {
-        var canvases = FontImageCreator.fontNames.map((d) => Canvas.createCanvas(imageSize, imageSize));
-
+    static nextBatch(canvases, count, imageSize, seed) {
+        //var canvases = {}; //FontImageCreator.fontNames.map((d) => Canvas.createCanvas(imageSize, imageSize));
         let buffer = new ArrayBuffer(count * imageSize * imageSize * 4);
         let rng = seedrandom(seed);
         //let canvas = Canvas.createCanvas(imageSize, imageSize);
-        let labelarray = [];
+        let labels = [];
         for (let i = 0; i < count; i++) {
             let s = Math.floor(1e8 * rng());
             let feats = FontImageCreator.calcFeatures(s);
-            let canvas = canvases[seed % FontImageCreator.fontNames.length];
-            let ctx = canvas.getContext("2d");
+            //let canvas = canvases[s % FontImageCreator.fontNames.length];
+            //let ctx = canvas.getContext("2d");
             //console.log(i + " - " + s + " - " + JSON.stringify(feats));
-            FontImageCreator.createRandomImage(ctx, imageSize, s);
+            let canvas = FontImageCreator.createRandomImage(canvases, null, imageSize, s);
             FontImageProvider.readImageData(buffer, i, canvas, imageSize);
-            labelarray.push(FontImageCreator.fontNames.map((d) => (d === feats.font ? 1 : 0)));
+            labels.push(FontImageCreator.fontNames.map((d) => (d === feats.font ? 1 : 0)));
         }
-        return { xs: new Float32Array(buffer, 0, count * imageSize * imageSize), labels: labelarray };
+        return { xs: new Float32Array(buffer, 0, count * imageSize * imageSize), labels };
     }
 }
 

@@ -26,7 +26,7 @@ export class FontImagesPage extends React.Component {
         var queryArgs = qs.parse(this.props.location.search.substring(1));
 		var seed = queryArgs.seed ? Number(queryArgs.seed) : new Date().getTime();
 		var rng = seedrandom(seed);
-		var size = 100;
+		var size = queryArgs.size ? Number(queryArgs.size) : 60;
 		var fontIndex = queryArgs.font ? FontImageCreator.fontNames.findIndex(d=>d===queryArgs.font) : -1;
 		var detailIndex = queryArgs.detail ? FontImageCreator.details.findIndex(d=>d===queryArgs.detail) : -1;
 		var upperIndex = queryArgs.upper ? FontImageCreator.upperGlyphs.indexOf(queryArgs.upper) : -1;

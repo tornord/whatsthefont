@@ -1,3 +1,5 @@
+var Canvas = require("canvas");
+
 export class FontImageCreator {
     static fontNames = [
         "Helvetica Neue",
@@ -105,9 +107,20 @@ export class FontImageCreator {
             text,
             detail
         };
+	}
+	
+	static getCanvas(canvases, fontStr, imageSize) {
+        var canvas = canvases[fontStr];
+        if (!canvas) {
+            canvas = Canvas.createCanvas(imageSize, imageSize);
+            let ctx = canvas.getContext("2d");
+            ctx.font = fontStr;
+            canvases[fontStr] = canvas;
+        }
+        return canvas;
     }
 
-    static createRandomImage(ctx, size, seed, backgroundColor) {
+    static createRandomImage(canvases, canvas, imageSize, seed, backgroundColor) {
         var { font, text, detail } = FontImageCreator.calcFeatures(seed);
 
         var fontSize = 0.55;
@@ -156,18 +169,25 @@ export class FontImageCreator {
 
         if (!backgroundColor) {
             backgroundColor = "rgba(255, 255, 255, 1)";
-        }
-        ctx.fillStyle = backgroundColor;
-        ctx.fillRect(0, 0, size, size);
+		}
+		
+		var fontStr = (imageSize * fontSize).toFixed(1) + "px " + "'" + font + "'";
+		if (!canvas) {
+			canvas = FontImageCreator.getCanvas(canvases, fontStr, imageSize);
+		}
+		var ctx = canvas.getContext("2d");
+		if (!canvases) {
+			ctx.font = fontStr;
+		}
 
-        font = FontImageCreator.fontNames[4];
-        ctx.font = (size * fontSize).toFixed(2) + "px " + "'" + font + "'";
-        // if (seed === 52443113) {
-        //     console.log("u2");
-        // }
+        ctx.fillStyle = backgroundColor;
+        ctx.fillRect(0, 0, imageSize, imageSize);
+
         ctx.fillStyle = "#000";
         ctx.textAlign = "center";
         ctx.textBaseline = "alphabetic";
-        ctx.fillText(text, size * (0.5 - fontSize * x), (3 * size) / 4 + size * fontSize * y);
+		ctx.fillText(text, imageSize * (0.5 - fontSize * x), (3 * imageSize) / 4 + imageSize * fontSize * y);
+		
+		return canvas;
     }
 }

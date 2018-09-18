@@ -8,6 +8,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var Canvas = require("canvas");
+
 var FontImageCreator = exports.FontImageCreator = function () {
     function FontImageCreator() {
         _classCallCheck(this, FontImageCreator);
@@ -56,8 +58,20 @@ var FontImageCreator = exports.FontImageCreator = function () {
             };
         }
     }, {
+        key: "getCanvas",
+        value: function getCanvas(canvases, fontStr, imageSize) {
+            var canvas = canvases[fontStr];
+            if (!canvas) {
+                canvas = Canvas.createCanvas(imageSize, imageSize);
+                var ctx = canvas.getContext("2d");
+                ctx.font = fontStr;
+                canvases[fontStr] = canvas;
+            }
+            return canvas;
+        }
+    }, {
         key: "createRandomImage",
-        value: function createRandomImage(ctx, size, seed, backgroundColor) {
+        value: function createRandomImage(canvases, canvas, imageSize, seed, backgroundColor) {
             var _FontImageCreator$cal = FontImageCreator.calcFeatures(seed),
                 font = _FontImageCreator$cal.font,
                 text = _FontImageCreator$cal.text,
@@ -110,18 +124,25 @@ var FontImageCreator = exports.FontImageCreator = function () {
             if (!backgroundColor) {
                 backgroundColor = "rgba(255, 255, 255, 1)";
             }
-            ctx.fillStyle = backgroundColor;
-            ctx.fillRect(0, 0, size, size);
 
-            font = FontImageCreator.fontNames[4];
-            ctx.font = (size * fontSize).toFixed(2) + "px " + "'" + font + "'";
-            // if (seed === 52443113) {
-            //     console.log("u2");
-            // }
+            var fontStr = (imageSize * fontSize).toFixed(1) + "px " + "'" + font + "'";
+            if (!canvas) {
+                canvas = FontImageCreator.getCanvas(canvases, fontStr, imageSize);
+            }
+            var ctx = canvas.getContext("2d");
+            if (!canvases) {
+                ctx.font = fontStr;
+            }
+
+            ctx.fillStyle = backgroundColor;
+            ctx.fillRect(0, 0, imageSize, imageSize);
+
             ctx.fillStyle = "#000";
             ctx.textAlign = "center";
             ctx.textBaseline = "alphabetic";
-            ctx.fillText(text, size * (0.5 - fontSize * x), 3 * size / 4 + size * fontSize * y);
+            ctx.fillText(text, imageSize * (0.5 - fontSize * x), 3 * imageSize / 4 + imageSize * fontSize * y);
+
+            return canvas;
         }
     }]);
 

@@ -71,7 +71,7 @@ export class FontImageCanvas extends Component {
 
         ctx.save();
         ch.fill("#fff");
-        FontImageCreator.createRandomImage(canvas, this.props.width, this.props.seed);
+        FontImageCreator.createRandomImage(null, canvas, this.props.width, this.props.seed);
         ctx.restore();
     }
 

@@ -8,19 +8,20 @@ var { FontImageCreator } = require("../commonjs/src/FontImageCreator");
 var { FontImageProvider } = require("./FontImageProvider");
 
 const BATCH_SIZE = 64;
-const TRAIN_BATCHES = 50;
+const TRAIN_BATCHES = 3000;
 const TEST_BATCH_SIZE = 1000;
 const TEST_ITERATION_FREQUENCY = 5;
-const IMAGES_SIZE = 28;
+const IMAGES_SIZE = 32;
 const SEED = new Date().getTime();
+var canvases = {};
 
 class UI {
     plotLosses(values) {}
     plotAccuracies(values) {}
 }
 
-function nextBatch(batchSize, imageSize, seed) {
-    let batch = FontImageProvider.nextBatch(batchSize, imageSize, seed);
+function nextBatch(canvases, batchSize, imageSize, seed) {
+    let batch = FontImageProvider.nextBatch(canvases, batchSize, imageSize, seed);
     let xs = tf.tensor2d(batch.xs, [batchSize, imageSize * imageSize]);
     let labels = tf.tensor2d(batch.labels, [batchSize, batch.labels[0].length]);
     xs = xs.reshape([batchSize, imageSize, imageSize, 1]);
@@ -42,11 +43,11 @@ async function train(model) {
     let accuracyValues = [];
     for (let i = 0; i < TRAIN_BATCHES; i++) {
         let [batch, validationData] = tf.tidy(() => {
-            let batch = nextBatch(BATCH_SIZE, IMAGES_SIZE, Math.floor(1e8 * rng()));
+            let batch = nextBatch(canvases, BATCH_SIZE, IMAGES_SIZE, Math.floor(1e8 * rng()));
 
             let validationData;
             if (i % TEST_ITERATION_FREQUENCY === 0) {
-                let testBatch = nextBatch(TEST_BATCH_SIZE, IMAGES_SIZE, Math.floor(1e8 * testRng()));
+                let testBatch = nextBatch(canvases, TEST_BATCH_SIZE, IMAGES_SIZE, Math.floor(1e8 * testRng()));
                 validationData = [testBatch.xs, testBatch.labels];
             }
             return [batch, validationData];
@@ -64,7 +65,7 @@ async function train(model) {
             ui.plotAccuracies(accuracyValues);
         }
         if (i > 0 && i % 20 === 0) {
-            console.log(
+            console.log(i + ": " + Object.keys(canvases).length + " - " +
                 accuracyValues
                     .slice(accuracyValues.length - 4, accuracyValues.length)
                     .map((d) => (100 * d.accuracy).toFixed(0))
@@ -98,36 +99,42 @@ async function run() {
     let res = await train(model);
     console.log(res.accuracyValues.map((d) => (100 * d.accuracy).toFixed(0)).join(" "));
 
-    let seed = new Date().getTime();
-    let testCount = 10000;
-    let batch = nextBatch(testCount, IMAGES_SIZE, seed);
-    let pred = model.predict(batch.xs, { batchSize: testCount });
-    let y = await batch.labels.data();
-    let yPred = await pred.data();
+    let seed = 123; //new Date().getTime();
+	let rng = seedrandom(seed);
+    let testBatchesCount = 1;
 
-    let rng = seedrandom(seed);
     let page = new ResultPage();
+    let nTot = 0;
     let nCorrect = 0;
-    for (let i = 0; i < testCount; i++) {
-        let imgseed = Math.floor(1e8 * rng());
-        let feats = FontImageCreator.calcFeatures(imgseed);
-        var predLab = FontImageCreator.fontNames.reduce(
-            (p, c, k) => {
-                var v = yPred[3 * i + k];
-                if (p.value > v) {
-                    return p;
-                }
-                return { name: c, value: v };
-            },
-            { name: "", value: 0 }
-        );
-        nCorrect += feats.font === predLab.name ? 1 : 0;
-        if (i < 1000) {
-            var src = FontImageProvider.createDataURL(IMAGES_SIZE, feats.font === predLab.name ? "#96f16a" : "#ec6a6a", imgseed);
-            page.addImage(feats.font + " => " + predLab.name + " " + (100 * predLab.value).toFixed(0) + "%", src);
-        }
+    for (let i = 0; i < testBatchesCount; i++) {
+		let batchSeed = Math.floor(1e8 * rng());
+		let batchRng = seedrandom(batchSeed);
+		let batch = nextBatch(canvases, TEST_BATCH_SIZE, IMAGES_SIZE, batchSeed);
+		let pred = model.predict(batch.xs, { batchSize: TEST_BATCH_SIZE });
+		// let y = await batch.labels.data();
+		let yPred = await pred.data();
+		for (let j=0; j<TEST_BATCH_SIZE; j++) {
+			let imgseed = Math.floor(1e8 * batchRng());
+			let feats = FontImageCreator.calcFeatures(imgseed);
+			var predLab = FontImageCreator.fontNames.reduce(
+				(p, c, k) => {
+					var v = yPred[FontImageCreator.fontNames.length * j + k];
+					if (p.value > v) {
+						return p;
+					}
+					return { name: c, value: v };
+				},
+				{ name: "", value: 0 }
+			);
+			nTot++;	
+			nCorrect += feats.font === predLab.name ? 1 : 0;
+			if (i === 0) {
+				var src = FontImageProvider.createDataURL(canvases, IMAGES_SIZE, feats.font === predLab.name ? "#96f16a" : "#ec6a6a", imgseed);
+				page.addImage(feats.font + " => " + predLab.name + " " + (100 * predLab.value).toFixed(0) + "%", src);
+			}
+		}
     }
-    console.log(((100 * nCorrect) / testCount).toFixed(2) + "%");
+    console.log(((100 * nCorrect) / nTot).toFixed(2) + "%");
     page.writeFile(path.join(__dirname, "../public/result.html"));
     var json = await modelToJson(model, "whatsthefont");
     var modelPath = path.join(__dirname, "data");
