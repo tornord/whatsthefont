@@ -53,7 +53,8 @@ export class FontImageCreator {
         "Pluto Sans",
         "Brandon Grotesque",
         "Raleway",
-        "Circular"
+        "Circular",
+        "Tratex"
     ];
 
     static details = ["randomTwoGlyphs", "randomUpperGlyph", "randomLowerGlyph", "g", "Q", "T", "O", "P", "A", "d", "k", "m", "J"];
@@ -107,9 +108,9 @@ export class FontImageCreator {
             text,
             detail
         };
-	}
-	
-	static getCanvas(canvases, fontStr, imageSize) {
+    }
+
+    static getCanvas(canvases, fontStr, imageSize) {
         var canvas = canvases[fontStr];
         if (!canvas) {
             canvas = Canvas.createCanvas(imageSize, imageSize);
@@ -169,16 +170,16 @@ export class FontImageCreator {
 
         if (!backgroundColor) {
             backgroundColor = "rgba(255, 255, 255, 1)";
-		}
-		
-		var fontStr = (imageSize * fontSize).toFixed(1) + "px " + "'" + font + "'";
-		if (!canvas) {
-			canvas = FontImageCreator.getCanvas(canvases, fontStr, imageSize);
-		}
-		var ctx = canvas.getContext("2d");
-		if (!canvases) {
-			ctx.font = fontStr;
-		}
+        }
+
+        var fontStr = (imageSize * fontSize).toFixed(1) + "px " + "'" + font + "'";
+        if (!canvas) {
+            canvas = FontImageCreator.getCanvas(canvases, fontStr, imageSize);
+        }
+        var ctx = canvas.getContext("2d");
+        if (!canvases) {
+            ctx.font = fontStr;
+        }
 
         ctx.fillStyle = backgroundColor;
         ctx.fillRect(0, 0, imageSize, imageSize);
@@ -186,8 +187,8 @@ export class FontImageCreator {
         ctx.fillStyle = "#000";
         ctx.textAlign = "center";
         ctx.textBaseline = "alphabetic";
-		ctx.fillText(text, imageSize * (0.5 - fontSize * x), (3 * imageSize) / 4 + imageSize * fontSize * y);
-		
-		return canvas;
+        ctx.fillText(text, imageSize * (0.5 - fontSize * x), (3 * imageSize) / 4 + imageSize * fontSize * y);
+
+        return canvas;
     }
 }

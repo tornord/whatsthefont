@@ -312,6 +312,12 @@
     font-style: normal;
 }
 @font-face {
+    font-family: "Tratex";
+    src: url("./fonts/Tratex.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
     font-family: "Verdana";
     src: url("./fonts/Verdana.woff2") format("woff2");
     font-weight: 400;

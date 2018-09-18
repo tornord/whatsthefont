@@ -8,7 +8,7 @@ var { FontImageCreator } = require("../commonjs/src/FontImageCreator");
 var { FontImageProvider } = require("./FontImageProvider");
 
 const BATCH_SIZE = 64;
-const TRAIN_BATCHES = 3000;
+const TRAIN_BATCHES = 1200;
 const TEST_BATCH_SIZE = 1000;
 const TEST_ITERATION_FREQUENCY = 5;
 const IMAGES_SIZE = 32;
@@ -65,11 +65,15 @@ async function train(model) {
             ui.plotAccuracies(accuracyValues);
         }
         if (i > 0 && i % 20 === 0) {
-            console.log(i + ": " + Object.keys(canvases).length + " - " +
-                accuracyValues
-                    .slice(accuracyValues.length - 4, accuracyValues.length)
-                    .map((d) => (100 * d.accuracy).toFixed(0))
-                    .join(" ")
+            console.log(
+                i +
+                    ": " +
+                    Object.keys(canvases).length +
+                    " - " +
+                    accuracyValues
+                        .slice(accuracyValues.length - 4, accuracyValues.length)
+                        .map((d) => (100 * d.accuracy).toFixed(0))
+                        .join(" ")
             );
         }
         tf.dispose([batch, validationData]);
@@ -100,39 +104,39 @@ async function run() {
     console.log(res.accuracyValues.map((d) => (100 * d.accuracy).toFixed(0)).join(" "));
 
     let seed = 123; //new Date().getTime();
-	let rng = seedrandom(seed);
+    let rng = seedrandom(seed);
     let testBatchesCount = 1;
 
     let page = new ResultPage();
     let nTot = 0;
     let nCorrect = 0;
     for (let i = 0; i < testBatchesCount; i++) {
-		let batchSeed = Math.floor(1e8 * rng());
-		let batchRng = seedrandom(batchSeed);
-		let batch = nextBatch(canvases, TEST_BATCH_SIZE, IMAGES_SIZE, batchSeed);
-		let pred = model.predict(batch.xs, { batchSize: TEST_BATCH_SIZE });
-		// let y = await batch.labels.data();
-		let yPred = await pred.data();
-		for (let j=0; j<TEST_BATCH_SIZE; j++) {
-			let imgseed = Math.floor(1e8 * batchRng());
-			let feats = FontImageCreator.calcFeatures(imgseed);
-			var predLab = FontImageCreator.fontNames.reduce(
-				(p, c, k) => {
-					var v = yPred[FontImageCreator.fontNames.length * j + k];
-					if (p.value > v) {
-						return p;
-					}
-					return { name: c, value: v };
-				},
-				{ name: "", value: 0 }
-			);
-			nTot++;	
-			nCorrect += feats.font === predLab.name ? 1 : 0;
-			if (i === 0) {
-				var src = FontImageProvider.createDataURL(canvases, IMAGES_SIZE, feats.font === predLab.name ? "#96f16a" : "#ec6a6a", imgseed);
-				page.addImage(feats.font + " => " + predLab.name + " " + (100 * predLab.value).toFixed(0) + "%", src);
-			}
-		}
+        let batchSeed = Math.floor(1e8 * rng());
+        let batchRng = seedrandom(batchSeed);
+        let batch = nextBatch(canvases, TEST_BATCH_SIZE, IMAGES_SIZE, batchSeed);
+        let pred = model.predict(batch.xs, { batchSize: TEST_BATCH_SIZE });
+        // let y = await batch.labels.data();
+        let yPred = await pred.data();
+        for (let j = 0; j < TEST_BATCH_SIZE; j++) {
+            let imgseed = Math.floor(1e8 * batchRng());
+            let feats = FontImageCreator.calcFeatures(imgseed);
+            var predLab = FontImageCreator.fontNames.reduce(
+                (p, c, k) => {
+                    var v = yPred[FontImageCreator.fontNames.length * j + k];
+                    if (p.value > v) {
+                        return p;
+                    }
+                    return { name: c, value: v };
+                },
+                { name: "", value: 0 }
+            );
+            nTot++;
+            nCorrect += feats.font === predLab.name ? 1 : 0;
+            if (i === 0) {
+                var src = FontImageProvider.createDataURL(canvases, IMAGES_SIZE, feats.font === predLab.name ? "#96f16a" : "#ec6a6a", imgseed);
+                page.addImage(feats.font + " => " + predLab.name + " " + (100 * predLab.value).toFixed(0) + "%", src);
+            }
+        }
     }
     console.log(((100 * nCorrect) / nTot).toFixed(2) + "%");
     page.writeFile(path.join(__dirname, "../public/result.html"));

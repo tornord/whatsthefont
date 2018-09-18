@@ -62,6 +62,7 @@ Canvas.registerFont(fontFile("Tahoma.ttf"), { family: "Tahoma" });
 Canvas.registerFont(fontFile("TimesNewRoman.ttf"), { family: "Times New Roman" });
 Canvas.registerFont(fontFile("Univers.ttf"), { family: "Univers" });
 Canvas.registerFont(fontFile("Verdana.ttf"), { family: "Verdana" });
+Canvas.registerFont(fontFile("Tratex.ttf"), { family: "Tratex" });
 
 class FontImageProvider {
     static createDataURL(canvases, imageSize, backgroundColor, seed) {
